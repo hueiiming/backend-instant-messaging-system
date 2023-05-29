@@ -61,13 +61,13 @@ func (c *RedisClient) GetMessagesByRoomID(ctx context.Context, roomID string, st
 	)
 
 	if reverse {
-		// Desc order with time -> first message is the latest message
+		// Desc order with time: first message is the latest message
 		rawMessages, err = c.cli.ZRevRange(ctx, roomID, start, end).Result()
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		// Asc order with time -> first message is the earliest message
+		// Asc order with time: first message is the earliest message
 		rawMessages, err = c.cli.ZRange(ctx, roomID, start, end).Result()
 		if err != nil {
 			return nil, err
@@ -97,7 +97,7 @@ func getRoomID(chat string) (string, error) {
 	}
 
 	sender1, sender2 := senders[0], senders[1]
-	// Compare the sender and receiver alphabetically, and sort them asc to form the room ID
+	// Compare the sender and receiver alphabetically, then sort them asc to form the room ID
 	if comp := strings.Compare(sender1, sender2); comp == 1 {
 		roomID = fmt.Sprintf("%s:%s", sender2, sender1)
 	} else {
